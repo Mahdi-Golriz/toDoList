@@ -1,35 +1,47 @@
+// libraries
 import { useState } from "react";
+
+// hooks
 import { useLocalStorageState } from "./hooks/useLocalStorageState";
+
+// components
 import Header from "./components/Header";
 import Form from "./components/Form";
 import List from "./components/List";
 import Item from "./components/Item";
 import Footer from "./components/Footer";
+import { taskSortKeys, taskSortValues } from "./configs/taskConfig";
 
 export default function App() {
-  const [sortBy, setSortBy] = useState("input");
-  // const [tasks, setTasks] = useState([]);
+  // local states
+  const [sortCriteria, setSortCriteria] = useState(
+    taskSortValues[taskSortKeys.INPUT]
+  );
   const [tasks, setTasks] = useLocalStorageState([], "tasks");
+
   let sortedTasks;
 
+  // handlers
   function handleDeleteTask(id) {
-    setTasks((currentTasks) => currentTasks.filter((task) => task.id !== id));
+    setTasks((prevTask) => prevTask.filter((task) => task.id !== id));
   }
 
-  function handleStatusTask(id) {
-    setTasks((tasks) =>
-      tasks.map((task) => (task.id === id ? { ...task, isDone: true } : task))
+  function handleTaskDone(id) {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, isDone: true } : task
+      )
     );
   }
 
-  function handleSelectTask(id) {
-    setTasks((tasks) =>
-      tasks.map((task) =>
+  function handleRowSelection(id) {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
         task.id === id
-          ? task.selected
-            ? { ...task, selected: false }
-            : { ...task, selected: true }
-          : { ...task, selected: false }
+          ? task.isTaskRowSelected
+            ? { ...task, isTaskRowSelected: false }
+            : { ...task, isTaskRowSelected: true }
+          : { ...task, isTaskRowSelected: false }
       )
     );
   }
@@ -38,46 +50,43 @@ export default function App() {
     setTasks([]);
   }
 
-  if (sortBy === "input") sortedTasks = tasks;
-  if (sortBy === "status")
-    sortedTasks = tasks
-      .slice()
-      .sort((a, b) => Number(a.isDone) - Number(b.isDone));
+  if (sortCriteria === taskSortValues[taskSortKeys.INPUT]) {
+    sortedTasks = tasks;
+  }
 
-  if (sortBy === "priority")
+  if (sortCriteria === taskSortValues[taskSortKeys.STATUS]) {
+    sortedTasks = structuredClone(tasks).sort(
+      (a, b) => Number(a.isDone) - Number(b.isDone)
+    );
+  }
+
+  if (sortCriteria === taskSortValues[taskSortKeys.PRIORITY])
     sortedTasks = tasks
       .slice()
       .sort((a, b) => Number(a.priority) - Number(b.priority));
 
   return (
-    <div className="container">
+    <main className="container">
       <Header />
       <Form
         tasks={tasks}
         setTasks={setTasks}
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-        onClearTasks={handleClearTasks}
+        sortCriteria={sortCriteria}
+        setSortCriteria={setSortCriteria}
+        clearTask={handleClearTasks}
       />
-      {/* <List
-        tasks={tasks}
-        onDeleteTask={handleDeleteTask}
-        onStatusTask={handleStatusTask}
-        onSelectTask={handleSelectTask}
-        sortedTasks={sortedTasks}
-      /> */}
       <List>
         {sortedTasks.map((task) => (
           <Item
             taskObj={task}
             key={task.id}
-            onDeleteTask={handleDeleteTask}
-            onStatusTask={handleStatusTask}
-            onSelectTask={handleSelectTask}
+            onhandleDeleteTask={handleDeleteTask}
+            onStatusTask={handleTaskDone}
+            onSelectTask={handleRowSelection}
           />
         ))}
       </List>
-      <Footer tasks={tasks} />
-    </div>
+      {/* <Footer tasks={tasks} /> */}
+    </main>
   );
 }

@@ -1,50 +1,68 @@
+// libraries
 import { useState } from "react";
 
-export default function Form({
-  tasks,
-  setTasks,
-  sortBy,
-  setSortBy,
-  onClearTasks,
-}) {
-  const [taskDescription, setTaskDescription] = useState("");
-  const [priority, setPriority] = useState("1");
+// configs
+import {
+  taskPriorities,
+  taskPrioritiesKeys,
+  taskSortKeys,
+  taskSortValues,
+} from "../configs/taskConfig";
+
+export default function Form(props) {
+  // props destructure
+  const { tasks, setTasks, sortCriteria, setSortCriteria, clearTask } = props;
+
+  // local states
+  const [taskTitle, setTaskTitle] = useState("");
+  const [taskPriority, setTaskPriority] = useState(taskPriorities.HIGH);
   const [taskDetails, setTaskDetails] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    if (!taskDescription) return;
+    if (!taskTitle) return;
 
-    const taskObject = {
-      id: Date.now(),
-      taskDescription,
-      priority,
-      taskDetails,
-      isDone: false,
-      selected: false,
-    };
-    setTasks([...tasks, taskObject]);
+    setTasks((prevTasks) => [
+      ...prevTasks,
+      {
+        id: Date.now(), // string
+        taskTitle, // string
+        taskPriority, // string  "1" "2" "3"
+        taskDetails, // string
+        isDone: false, // boolean
+        isTaskRowSelected: false, // boolean
+      },
+    ]);
 
-    setTaskDescription("");
+    setTaskTitle("");
     setTaskDetails("");
   }
 
   return (
-    <div className="form">
+    <div className="form_container">
       <form onSubmit={handleSubmit}>
         <input
           type="text"
           id="task"
-          placeholder="Main activity..."
-          value={taskDescription}
-          onChange={(e) => setTaskDescription(e.target.value)}
+          placeholder="Task Title"
+          value={taskTitle}
+          onChange={(e) => setTaskTitle(e.target.value)}
         />
 
-        <select value={priority} onChange={(e) => setPriority(e.target.value)}>
-          <option value="1">First priority</option>
-          <option value="2">Less important</option>
-          <option value="3">Not so important</option>
+        <select
+          value={taskPriority}
+          onChange={(e) => setTaskPriority(e.target.value)}
+        >
+          <option value={taskPriorities[taskPrioritiesKeys.HIGH]}>
+            {taskPrioritiesKeys.HIGH}
+          </option>
+          <option value={taskPriorities[taskPrioritiesKeys.MEDIUM]}>
+            {taskPrioritiesKeys.MEDIUM}
+          </option>
+          <option value={taskPriorities[taskPrioritiesKeys.LOW]}>
+            {taskPrioritiesKeys.LOW}
+          </option>
         </select>
 
         <textarea
@@ -53,19 +71,26 @@ export default function Form({
           maxLength="200"
           value={taskDetails}
           onChange={(e) => setTaskDetails(e.target.value)}
-          placeholder="Description..."
+          placeholder="Task Description"
         />
 
-        <button>Add</button>
+        <button>Add New Task</button>
       </form>
-      <div className="sort">
-        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-          <option value="input">Sorted by Input value</option>
-          <option value="status">Sorted by Status</option>
-          <option value="priority">Sorted by Priority</option>
-        </select>
-        <button onClick={onClearTasks}>Clear All</button>
-      </div>
+      <select
+        value={sortCriteria}
+        onChange={(e) => setSortCriteria(e.target.value)}
+      >
+        <option value={taskSortValues[taskSortKeys.INPUT]}>
+          {taskSortKeys.INPUT}
+        </option>
+        <option value={taskSortValues[taskSortKeys.STATUS]}>
+          {taskSortKeys.STATUS}
+        </option>
+        <option value={taskSortValues[taskSortKeys.PRIORITY]}>
+          {taskSortKeys.PRIORITY}
+        </option>
+      </select>
+      <button onClick={clearTask}>Clear All</button>
     </div>
   );
 }

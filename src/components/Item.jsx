@@ -4,17 +4,23 @@ export default function Item({
   onStatusTask,
   onSelectTask,
 }) {
-  const { id, selected, isDone, taskDescription, priority, taskDetails } =
-    taskObj;
+  const {
+    id,
+    isTaskRowSelected,
+    isDone,
+    taskTitle,
+    taskPriority,
+    taskDetails,
+  } = taskObj;
 
   return (
     <>
       <li
         onClick={() => onSelectTask(id)}
-        className={selected ? "selected" : ""}
+        className={isTaskRowSelected ? "isTaskRowSelected" : ""}
       >
-        <span className={isDone ? "active" : ""}>{taskDescription}</span>
-        <span>{priority}</span>
+        <span className={isDone ? "active" : ""}>{taskTitle}</span>
+        <span>{taskPriority}</span>
         <input
           type="checkbox"
           onClick={() => onStatusTask(id)}
@@ -23,12 +29,12 @@ export default function Item({
         />
         <button
           onClick={() => onDeleteTask(id)}
-          className={selected ? "selected" : ""}
+          className={isTaskRowSelected ? "isTaskRowSelected" : ""}
         >
           ❌
         </button>
       </li>
-      {selected && (
+      {isTaskRowSelected && (
         <div className="details">
           <h4>Task details</h4>
 

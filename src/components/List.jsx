@@ -3,10 +3,10 @@ export default function List({ children }) {
     <main className="list">
       <ul>
         <li className="headerRow">
-          <span>Main activity</span>
+          <span>Title</span>
           <span>Priority</span>
           <span>Status</span>
-          <span>Delete</span>
+          <span>Action</span>
         </li>
         {children}
       </ul>
