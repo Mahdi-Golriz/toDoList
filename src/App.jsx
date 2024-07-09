@@ -18,7 +18,6 @@ export default function App() {
     taskSortValues[taskSortKeys.INPUT]
   );
   const [tasks, setTasks] = useLocalStorageState([], "tasks");
-
   let sortedTasks;
 
   // handlers
@@ -55,6 +54,19 @@ export default function App() {
     setTasks([]);
   }
 
+  function handleEditTask(e, id) {
+    e.stopPropagation();
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id
+          ? task.isEditFormShowed
+            ? { ...task, isEditFormShowed: false }
+            : { ...task, isEditFormShowed: true }
+          : { ...task, isEditFormShowed: false }
+      )
+    );
+  }
+
   if (sortCriteria === taskSortValues[taskSortKeys.INPUT]) {
     sortedTasks = tasks;
   }
@@ -66,9 +78,9 @@ export default function App() {
   }
 
   if (sortCriteria === taskSortValues[taskSortKeys.PRIORITY])
-    sortedTasks = tasks
-      .slice()
-      .sort((a, b) => Number(a.priority) - Number(b.priority));
+    sortedTasks = structuredClone(tasks).sort(
+      (a, b) => Number(a.taskPriority) - Number(b.taskPriority)
+    );
 
   return (
     <>
@@ -89,6 +101,9 @@ export default function App() {
               handleDeleteTask={handleDeleteTask}
               onStatusTask={handleTaskDone}
               onSelectTask={handleRowSelection}
+              editTask={handleEditTask}
+              handleEditTask={handleEditTask}
+              setTasks={setTasks}
             />
           ))}
         </List>

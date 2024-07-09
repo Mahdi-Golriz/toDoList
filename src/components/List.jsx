@@ -14,7 +14,10 @@ export default function List({ children }) {
               Status
             </th>
             <th scope="col" className="col-10">
-              Action
+              Delete
+            </th>
+            <th scope="col" className="col-10">
+              Edit
             </th>
           </tr>
         </thead>

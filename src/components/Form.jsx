@@ -34,6 +34,7 @@ export default function Form(props) {
         taskDetails, // string
         isDone: false, // boolean
         isTaskRowSelected: false, // boolean
+        isEditFormShowed: false, // boolean
       },
     ]);
 
