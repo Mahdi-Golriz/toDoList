@@ -1,7 +1,7 @@
 export const taskPrioritiesKeys = {
-  HIGH: "HIGH",
-  MEDIUM: "MEDIUM",
-  LOW: "LOW",
+  HIGH: "High Priority (1)",
+  MEDIUM: "Medium Priority (2)",
+  LOW: "Low Priority (3)",
 };
 
 export const taskPriorities = {
@@ -11,9 +11,9 @@ export const taskPriorities = {
 };
 
 export const taskSortKeys = {
-  INPUT: "input",
-  STATUS: "status",
-  PRIORITY: "taskPriority",
+  INPUT: "Sort Tasks by Input",
+  STATUS: "Sort Tasks by Status",
+  PRIORITY: " Sort Tasks by Priority",
 };
 
 export const taskSortValues = {

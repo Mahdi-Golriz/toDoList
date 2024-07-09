@@ -1,6 +1,6 @@
 export default function Item({
   taskObj,
-  onDeleteTask,
+  handleDeleteTask,
   onStatusTask,
   onSelectTask,
 }) {
@@ -15,32 +15,30 @@ export default function Item({
 
   return (
     <>
-      <li
-        onClick={() => onSelectTask(id)}
-        className={isTaskRowSelected ? "isTaskRowSelected" : ""}
-      >
-        <span className={isDone ? "active" : ""}>{taskTitle}</span>
-        <span>{taskPriority}</span>
-        <input
-          type="checkbox"
-          onClick={() => onStatusTask(id)}
-          value={isDone}
-          disabled={isDone}
-        />
-        <button
-          onClick={() => onDeleteTask(id)}
-          className={isTaskRowSelected ? "isTaskRowSelected" : ""}
-        >
-          ❌
-        </button>
-      </li>
-      {isTaskRowSelected && (
-        <div className="details">
-          <h4>Task details</h4>
-
-          <p>{!taskDetails ? "There is no details to show" : taskDetails}</p>
-        </div>
-      )}
+      <tr onClick={() => onSelectTask(id)}>
+        <td className={`col-70 ${isDone ? "active" : ""}`}>{taskTitle}</td>
+        <td className="col-10">{taskPriority}</td>
+        <td className="col-10">
+          <input
+            type="checkbox"
+            onClick={() => onStatusTask(id)}
+            value={isDone}
+            // disabled={isDone}
+          />
+        </td>
+        <td className="col-10">
+          <button onClick={() => handleDeleteTask(id)}>❌</button>
+        </td>
+      </tr>
+      <tr className="row-spacing">
+        {isTaskRowSelected && (
+          <td colSpan="4" className="full-width">
+            {!taskDetails
+              ? "There is no description for this task"
+              : taskDetails}
+          </td>
+        )}
+      </tr>
     </>
   );
 }

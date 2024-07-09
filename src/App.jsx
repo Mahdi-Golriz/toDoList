@@ -29,7 +29,11 @@ export default function App() {
   function handleTaskDone(id) {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
-        task.id === id ? { ...task, isDone: true } : task
+        task.id === id
+          ? task.isDone
+            ? { ...task, isDone: false }
+            : { ...task, isDone: true }
+          : task
       )
     );
   }
@@ -66,27 +70,29 @@ export default function App() {
       .sort((a, b) => Number(a.priority) - Number(b.priority));
 
   return (
-    <main className="container">
-      <Header />
-      <Form
-        tasks={tasks}
-        setTasks={setTasks}
-        sortCriteria={sortCriteria}
-        setSortCriteria={setSortCriteria}
-        clearTask={handleClearTasks}
-      />
-      <List>
-        {sortedTasks.map((task) => (
-          <Item
-            taskObj={task}
-            key={task.id}
-            onhandleDeleteTask={handleDeleteTask}
-            onStatusTask={handleTaskDone}
-            onSelectTask={handleRowSelection}
-          />
-        ))}
-      </List>
-      {/* <Footer tasks={tasks} /> */}
-    </main>
+    <>
+      <main className="container">
+        <Header />
+        <Form
+          tasks={tasks}
+          setTasks={setTasks}
+          sortCriteria={sortCriteria}
+          setSortCriteria={setSortCriteria}
+          clearTask={handleClearTasks}
+        />
+        <List>
+          {sortedTasks.map((task) => (
+            <Item
+              taskObj={task}
+              key={task.id}
+              handleDeleteTask={handleDeleteTask}
+              onStatusTask={handleTaskDone}
+              onSelectTask={handleRowSelection}
+            />
+          ))}
+        </List>
+        <Footer tasks={tasks} />
+      </main>
+    </>
   );
 }
