@@ -11,9 +11,9 @@ export const taskPriorities = {
 };
 
 export const taskSortKeys = {
-  INPUT: "Sort Tasks by Input",
-  STATUS: "Sort Tasks by Status",
-  PRIORITY: " Sort Tasks by Priority",
+  INPUT: "Sort by Input",
+  STATUS: "Sort by Status",
+  PRIORITY: " Sort by Priority",
 };
 
 export const taskSortValues = {

@@ -26,7 +26,8 @@ export default function App() {
     setTasks((prevTask) => prevTask.filter((task) => task.id !== id));
   }
 
-  function handleTaskDone(id) {
+  function handleTaskDone(e, id) {
+    e.stopPropagation();
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.id === id

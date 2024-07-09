@@ -21,7 +21,7 @@ export default function Item({
         <td className="col-10">
           <input
             type="checkbox"
-            onClick={() => onStatusTask(id)}
+            onClick={(e) => onStatusTask(e, id)}
             value={isDone}
             // disabled={isDone}
           />
